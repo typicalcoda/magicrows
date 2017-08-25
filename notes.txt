@@ -1,0 +1,25 @@
+25/08/2017
+13:15 - Need to make it so that when they make the type 'Yes/np - Specified' ... they should be able to put 2 values in
+
+23/08/2017
+22:43 - Worked on this page a lot more... (Idea Component)
+22:49 - Made it so the opt-buttons beside the inputs for the fields are better positioned, and also - it only shows a tick (to add fields) unless a field is actively being edited in which case all three buttons appear (submit changes, cancel, and delete field), also added a "unique" property, which basically means,
+when enabled, that values in this particular field must be like an id field, it has to be unique from any other existing record of this idea/collection
+
+
+21/08/2017
+Ok this notes page will be private only for this project, the others can be whatever :D this one doesn't have to care about it :p
+Ok so when creating an idea, you can select from one of these field types:
+	Text
+	Number
+	Email
+	Random value
+	Counter
+a random ID is a hexadecimal ID
+a counter is a number that's assigned according to the (number of currently-existing records + 1)
+by default, the application will have its own rules on various restrictions and character limitations...
+however, if the person presses 'Advanced' when creating a field, they'll gain access to another set of 
+more customisable properties of that field, like enforcing minimum/maximum character lengths, not matching
+certain patterns, making it unique. For example, if a person creates a new field called "Invitation Token",
+and sets it to a type of: "Random value"... by default, the application will generate a 32-bit alphanumeric string
+of random combination. However, if the user clicks advanced, they can modify it to be a 5-character-long, unique, numbers-only random digit

@@ -8,19 +8,15 @@
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
-	<div id="app" class="dark">
+	<div id="app">
+		<side-bar></side-bar>
 		<top-bar></top-bar>
-
-		<br><Br><Br><Br>
-		<div class="container">
-			<div class="col-md-4">
-				ahah
-			</div>
-		</div>
 		
+		<div class="page-body">	
+			<router-view></router-view>
+		</div>
 	</div>
-
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.js"></script>
 	<script src="/js/app.js"></script>
 </body>
 </html>

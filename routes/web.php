@@ -12,6 +12,7 @@
 */
 
 Route::get('/', function () {
+
 	if(Auth::check()){
 		if(Auth::user()->userType == 1){
 			return view('admin.index');
@@ -23,16 +24,26 @@ Route::get('/', function () {
 	return redirect('/login');
 });
 
-Route::get('/login', function(){	
+Route::get('/login', function(){
+
 	if(Auth::check()){
 		return redirect('/');
 	}
 	return view('auth.login');
 });	
+
 Route::post('/login', function(){
+
 	if(!Auth::attempt(request(['email', 'password'])))
 		return back();
 
 	return redirect('/');
-
 });
+
+Route::get('/{vue_capture?}', function ($page) {
+	
+	if(Auth::check())
+		return view('admin.index', compact('page'));
+
+	return redirect('/login');
+})->where('vue_capture', '[\/\w\.-]*');
