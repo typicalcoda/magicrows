@@ -6,8 +6,14 @@
 .container,.container-fluid{
 	height:100%;
 }
+.no-pad{padding-left:0;padding-right:0;}
 .blue{
 	background:blue;
+}
+a,a:focus,a:hover,a:active{
+	text-decoration: none;
+	color:white;
+
 }
 .default{
 	color:#828282 !important;
@@ -22,13 +28,18 @@
 	background: #f3dada !important;
 	color: #bf9393 !important;
 	transition:.3s;
+	cursor:pointer;
 	&:hover{
 		background: #debebe !important;
-		cursor:pointer;
 	}
 }
 .green{
-	background:green;
+	background: #b0e0b0;
+	color:#fff;
+	transition:.3s;
+	&:hover{
+		background: darken(#b0e0b0, 10%) !important;
+	}
 }
 .line-space{
 	margin-bottom:30px;
@@ -46,7 +57,7 @@
 	user-select: none;
 	
 }
-body,html{
+body,html, .app{
 	height:100%;
 	margin:0;padding:0;
 	font-family: 'Open Sans', sans-serif;
@@ -96,14 +107,29 @@ body,html{
 		textarea{height:70px;}
 	}
 	table{
-		background: #daeaff;
-		color: #8ebad4;
 		width: 100%;
-		text-align: left;
 		margin-top: 10px;
 		border-top-left-radius: 5px;
 		border-top-right-radius: 5px;
-		padding: 2px;
+		thead{
+			background: #daeaff;
+			color: #8ebad4;
+			text-align: left;
+			th{
+				padding: 6px;
+			}
+		}
+		tbody{
+			tr{
+				height: 25px;
+				&:nth-child(odd){
+					background: #f9f9f9;
+				}
+				td{
+					padding:0 5px;
+				}
+			}
+		}
 	}
 	.btn-opts{
 		padding-top:15px;
@@ -116,8 +142,46 @@ body,html{
 			height: 35px;
 			width: 35px;
 			line-height: 2.7em;
-			margin-top: 5px;
-			margin-bottom: 0;
+			margin-bottom:5px;
+		}
+	}
+	button{
+		border: 0;
+		padding: 17px 13px;
+		outline:0;
+		color: white;
+		cursor:pointer;
+	}
+	.panel{
+		.bottom-line{
+			border-bottom: 1px solid #f7f7f7;
+		}
+		-webkit-box-shadow: 0px 0px 34px -9px rgba(0,0,0,0.22);
+		-moz-box-shadow: 0px 0px 34px -9px rgba(0,0,0,0.22);
+		box-shadow: 0px 0px 34px -9px rgba(0,0,0,0.22);
+		margin:0 15px;
+		padding:20px;
+		color: #828282;
+		font-size: 12px;
+		background:#fff;
+		.heading{
+			font-family: 'Ubuntu', sans-serif;
+			font-size: 14px;
+			padding-bottom: 15px;
+			margin-bottom: 30px;
+		}
+		.field-type{
+			background: #d2a991;
+			color: white;
+			padding: 1px 3px;
+			border-radius: 6px;
+			font-size: 11px;
+			text-transform: lowercase;;
+		}
+		.clickable{
+			color: #6eb2d4;
+			text-decoration: underline;
+			cursor: pointer;
 		}
 	}
 }

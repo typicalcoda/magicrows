@@ -14,20 +14,31 @@
 Route::get('/', function () {
 
 	if(Auth::check()){
-		if(Auth::user()->userType == 1){
-			return view('admin.index');
-		} else {
-			return view('user.index');
-		}
+		return view('admin.index');
 	}
 
 	return redirect('/login');
 });
 
+
+Route::group(['middleware' => 'auth'], function(){
+
+
+	Route::get('/test/guid', function(){	
+		echo guid();
+	});
+
+	Route::get('/api/get/ideas-brief', function(){	
+		return DB::select("SELECT ideas.id, ideas.name, categories.name as `category`, ideas.access_lvl, ideas.created_at, ideas.updated_at, users.name as `user` FROM ideas INNER JOIN categories ON ideas.category_id=categories.id INNER JOIN users ON ideas.user_id=users.id");
+	});
+
+});
+
+
 Route::get('/login', function(){
 
 	if(Auth::check()){
-		return redirect('/');
+		return redirect('/home');
 	}
 	return view('auth.login');
 });	

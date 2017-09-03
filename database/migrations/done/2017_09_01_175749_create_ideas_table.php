@@ -14,12 +14,13 @@ class CreateIdeasTable extends Migration
     public function up()
     {
         Schema::create('ideas', function (Blueprint $table) {
-            $table->increments('id');
+            $table->string('id', 36);
             $table->string('name');
-            $table->text('description');
-            $table->integer('access_lvl');
-            $table->boolean('is_auth');
-            $table->integer('max_records');
+            $table->string('category_id', 36)->nullable();
+            $table->string('user_id', 36)->nullable();
+            $table->text('description')->nullable();
+            $table->integer('access_lvl')->nullable();
+            $table->integer('max_records')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });

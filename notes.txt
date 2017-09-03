@@ -1,5 +1,67 @@
+1/09/2017 #Eid
+
+
+31/08/2017
+Contacted some influencers, hijabis, bears, league ... ill see which reply
+Contacted a whole bunch of fb users...
+Aaaand, now I'm just gonna sit back, if I get them to agree with a good price - i'll work on the site more, add a wallpaper, insert products, do a test etc.
+
+
+30/08/2017 #Birthday
+Aside from it being your birthday ^.^...
+Use myip.ms to track popular Shopify websites for your niche, look at their products & study them
+Try to go for products under $1 for a bigger margin
+Check how the products are doing on Ebay/Amazon first
+Instagram influencers
+Currency conversion plugin on Shopify
+
+
+
+29/08/2017
+TO DO:
+07:00 - Eat breakfast
+08:10 - Go to work
+??:?? - Get your work done
+??:?? - Eat snacks
+??:?? - Eat lunch
+??:?? - Get some movement in
+??:?? - Work
+??:?? - Work
+??:?? - Work
+??:?? - Work
+??:?? - Work
+??:?? - Work
+17:15 - Hometime!
+Buy exfoliator
+Already bought the book and renewed bus pass, so it's all gd there
+18:00 - HOME! Relax.. :D
+19:00 - Dinner.
+19:45 - Spend some time working on magicrows.
+21:00 - Research and learn more about the Shopify thing, read and research A LOT!
+Create a logo for passive creativity, and a banner... keep in mind you can do anything with this brand atm
+I'm considering leaning towards like jewelery, necklaces targeted at body-building males and perhaps pet-owning/fashion-loving women etc.
+Make sure the site looks legit, put a lot of content into it, proof-check, grammar-check ... keep it informative, to the point, and punchy..
+Keep the pictures sleek and HQ - add contact sources so people know I ain't playin around!
+Look around for the Obleru plugin or w/e, re-watch that How To Build a Six Figure...... vid, study it, watch similar ones, search for alternatives to the 
+app he sells for $47/month...
+Market well, load all products on your store, set up facebook group, get a couple of likes on there, add lots of pics and make posts. 
+Consider using fiverr.. etc. to draw people to the group (I suggest doing this AFTER you have pics and posts with offers and link to the products)
+Once site and group etc. are all set up, launch the ad campaign!
+Hopefully you get a couple of sales from it!! Then keep learning, keep marketing!!
+
+
+
+28/08/2017
+Today I managed to do the functionality for editing a field. So, you click on its name, it gets loaded into the form, and you can change values
+and then press the tick to submit changes. I also added a create button on the bottom-left, and a small delete icon on the top-right, aligned with the panel's
+heading. I kept the delete icon small, and as an icon to make it hard to see, which just makes it less likely for somebody to accidentally delete the entire idea.
+I've also changed the database, started afresh, created an Idea model and also migrated the database. I'm ready to start inserting.
+
 25/08/2017
 13:15 - Need to make it so that when they make the type 'Yes/No - Specified' ... they should be able to put 2 values in
+^ no need for this... think about it, it's illogical if you are already able to name a Yes/No field, you don't need to specify it.
+19:56 - Dropdown type
+00:18 - Perhaps
 
 23/08/2017
 22:43 - Worked on this page a lot more... (Idea Component)

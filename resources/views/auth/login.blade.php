@@ -68,6 +68,15 @@
 		.form button:hover{
 			background:#122d33;
 		}
+		input:-webkit-autofill {
+			-webkit-box-shadow:0 0 0 50px #1f1f1f inset; 
+			-webkit-text-fill-color: #545454;
+		}
+
+		input:-webkit-autofill:focus {
+			-webkit-box-shadow:0 0 0 50px #1f1f1f inset; 
+			-webkit-text-fill-color: #545454;
+		} 
 	</style>
 </head>
 <body>
@@ -78,7 +87,7 @@
 
 		<div class="form">
 			<form action="/login" method="post">
-			{{ csrf_field() }}
+				{{ csrf_field() }}
 				<div class="input-group">
 					<label for="email">Email</label>
 					<input id="email" name="email" type="text">

@@ -962,8 +962,21 @@
   height: 100%;
 }
 
+.no-pad {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .blue {
   background: blue;
+}
+
+a,
+a:focus,
+a:hover,
+a:active {
+  text-decoration: none;
+  color: white;
 }
 
 .default {
@@ -983,15 +996,22 @@
   color: #bf9393 !important;
   -webkit-transition: .3s;
   transition: .3s;
+  cursor: pointer;
 }
 
 .red:hover {
   background: #debebe !important;
-  cursor: pointer;
 }
 
 .green {
-  background: green;
+  background: #b0e0b0;
+  color: #fff;
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+
+.green:hover {
+  background: #8bd28b !important;
 }
 
 .line-space {
@@ -1012,7 +1032,8 @@
 }
 
 body,
-html {
+html,
+.app {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -1073,14 +1094,32 @@ html {
 }
 
 .typical-body table {
-  background: #daeaff;
-  color: #8ebad4;
   width: 100%;
-  text-align: left;
   margin-top: 10px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  padding: 2px;
+}
+
+.typical-body table thead {
+  background: #daeaff;
+  color: #8ebad4;
+  text-align: left;
+}
+
+.typical-body table thead th {
+  padding: 6px;
+}
+
+.typical-body table tbody tr {
+  height: 25px;
+}
+
+.typical-body table tbody tr:nth-child(odd) {
+  background: #f9f9f9;
+}
+
+.typical-body table tbody tr td {
+  padding: 0 5px;
 }
 
 .typical-body .btn-opts {
@@ -1096,7 +1135,50 @@ html {
   height: 35px;
   width: 35px;
   line-height: 2.7em;
-  margin-top: 5px;
-  margin-bottom: 0;
+  margin-bottom: 5px;
+}
+
+.typical-body button {
+  border: 0;
+  padding: 17px 13px;
+  outline: 0;
+  color: white;
+  cursor: pointer;
+}
+
+.typical-body .panel {
+  -webkit-box-shadow: 0px 0px 34px -9px rgba(0, 0, 0, 0.22);
+  box-shadow: 0px 0px 34px -9px rgba(0, 0, 0, 0.22);
+  margin: 0 15px;
+  padding: 20px;
+  color: #828282;
+  font-size: 12px;
+  background: #fff;
+}
+
+.typical-body .panel .bottom-line {
+  border-bottom: 1px solid #f7f7f7;
+}
+
+.typical-body .panel .heading {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 14px;
+  padding-bottom: 15px;
+  margin-bottom: 30px;
+}
+
+.typical-body .panel .field-type {
+  background: #d2a991;
+  color: white;
+  padding: 1px 3px;
+  border-radius: 6px;
+  font-size: 11px;
+  text-transform: lowercase;
+}
+
+.typical-body .panel .clickable {
+  color: #6eb2d4;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
