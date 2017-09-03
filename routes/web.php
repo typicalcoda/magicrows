@@ -32,6 +32,18 @@ Route::group(['middleware' => 'auth'], function(){
 		return DB::select("SELECT ideas.id, ideas.name, categories.name as `category`, ideas.access_lvl, ideas.created_at, ideas.updated_at, users.name as `user` FROM ideas INNER JOIN categories ON ideas.category_id=categories.id INNER JOIN users ON ideas.user_id=users.id");
 	});
 
+	Route::get('/api/get/idea/{id}', function($id){	
+		$idea = DB::select("SELECT ideas.name, ideas.description, categories.name as `category_name`, ideas.access_lvl, ideas.max_records FROM ideas INNER JOIN categories on categories.id = ideas.category_id");
+		$fields = "hey";
+		return array('idea' => $idea, 'fields' => $fields);
+	});
+
+	Route::get('/logout', function(){	
+		if(Auth::check())
+			Auth::logout();
+		return redirect('/');
+	});
+
 });
 
 

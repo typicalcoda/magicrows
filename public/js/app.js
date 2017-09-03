@@ -43716,6 +43716,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -43752,12 +43754,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	},
 	mounted: function mounted() {
 		var scope = this;
-		console.log("Getting ideas");
-		axios.get('api/get/ideas').then(function (res) {
-			scope.$store.dispatch('saveIdeas', res.data);
-		}).catch(function (err) {
-			swal("An error ocurred", "Could not fetch ideas", "error");
-		});
+		if (scope.$store.getters.getIdeas.length == 0) {
+			axios.get('api/get/ideas/').then(function (res) {
+				scope.$store.dispatch('saveIdeas', res.data);
+			}).catch(function (err) {
+				swal("An error ocurred", "Could not fetch ideas", "error");
+			});
+		}
+
+		if (!this.isCreating) {
+			axios.get('/api/get/idea/' + this.$route.params.id).then(function (res) {
+				console.log(res.data);
+			}).catch(function (err) {
+				swal("An error occurred", "Idea details could not be fetched at this time.", "error");
+			});
+		}
 	},
 
 	methods: {
@@ -43807,6 +43818,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		'field.type': function fieldType(val) {
 			this.isOptionType = val == "Options";
 		}
+	},
+	computed: {
+		isCreating: function isCreating() {
+			return !this.$route.params.id;
+		},
+		theIdea: function theIdea() {
+			var id = this.$route.params.id;
+			console.log(this.$store.getters.getIdeas);
+		}
 	}
 });
 
@@ -43817,9 +43837,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "typical-body"
-  }, [_vm._m(0), _vm._v(" "), _c('div', {
+  }, [_c('div', {
+    staticClass: "title"
+  }, [_c('i', {
+    staticClass: "fa fa-bolt"
+  }), _vm._v(" "), _c('span', [_vm._v(_vm._s(_vm.isCreating ? 'Create a new' : 'Editing') + " Idea")])]), _vm._v(" "), _c('div', {
     staticClass: "panel"
-  }, [_vm._m(1), _vm._v(" "), _c('div', {
+  }, [_c('div', {
+    staticClass: "heading bottom-line"
+  }, [(_vm.isCreating) ? _c('span', [_vm._v("Create a new Idea")]) : _c('span', [_vm._v("Editing "), _c('b', [_vm._v(_vm._s(_vm.idea.name))])]), _vm._v(" "), _c('i', {
+    staticClass: "fa fa-trash pull-right"
+  })]), _vm._v(" "), _c('div', {
     staticClass: "div container-fluid none"
   }, [_c('div', {
     staticClass: "col-md-6"
@@ -43981,7 +44009,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.idea.maxRecords = $event.target.value
       }
     }
-  })])])])]), _vm._v(" "), _vm._m(2), _vm._v(" "), _c('div', {
+  })])])])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-11"
@@ -44086,7 +44114,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "value": "Options"
     }
-  }, [_vm._v("Options")])]), _vm._v(" "), (_vm.isOptionType) ? _c('div', [_vm._m(3), _vm._v(" "), _c('input', {
+  }, [_vm._v("Options")])]), _vm._v(" "), (_vm.isOptionType) ? _c('div', [_vm._m(1), _vm._v(" "), _c('input', {
     staticStyle: {
       "width": "80%",
       "float": "right"
@@ -44295,7 +44323,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "cellpadding": "0",
       "cellspacing": "0"
     }
-  }, [_vm._m(4), _vm._v(" "), _c('tbody', _vm._l((_vm.idea.fields), function(f) {
+  }, [_vm._m(2), _vm._v(" "), _c('tbody', _vm._l((_vm.idea.fields), function(f) {
     return _c('tr', [_c('td', [_c('span', {
       staticClass: "clickable",
       on: {
@@ -44323,18 +44351,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("Create")])], 1)])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "title"
-  }, [_c('i', {
-    staticClass: "fa fa-bolt"
-  }), _vm._v(" "), _c('span', [_vm._v("Create a new Idea")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "heading bottom-line"
-  }, [_vm._v("Create an idea\n\t\t\t"), _c('i', {
-    staticClass: "fa fa-trash pull-right"
-  })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "row"
   }, [_c('div', {

@@ -3,11 +3,13 @@
 
 		<div class="title">
 			<i class="fa fa-bolt"></i>
-			<span>Create a new Idea</span>
+			<span>{{isCreating ? 'Create a new' : 'Editing' }} Idea</span>
 		</div>
 
 		<div class="panel">
-			<div class="heading bottom-line">Create an idea
+			<div class="heading bottom-line">
+				<span v-if="isCreating">Create a new Idea</span>
+				<span v-else>Editing <b>{{idea.name}}</b></span>
 				<i class="fa fa-trash pull-right"></i>
 			</div>
 			<div class="div container-fluid none">
@@ -227,14 +229,26 @@
 		},
 		mounted(){
 			let scope = this
-			console.log("Getting ideas")
-			axios.get('api/get/ideas')
-			.then(function(res){
-				scope.$store.dispatch('saveIdeas', res.data)
-			})
-			.catch(function(err){
-				swal("An error ocurred", "Could not fetch ideas", "error")
-			})
+			if(scope.$store.getters.getIdeas.length == 0){
+				axios.get('api/get/ideas/')
+				.then(function(res){
+					scope.$store.dispatch('saveIdeas', res.data)
+				})
+				.catch(function(err){
+					swal("An error ocurred", "Could not fetch ideas", "error")
+				})
+			}
+
+			if(!this.isCreating)
+			{
+				axios.get('/api/get/idea/' + this.$route.params.id)
+				.then( function(res){
+					console.log(res.data);
+				})
+				.catch( function(err){
+					swal("An error occurred", "Idea details could not be fetched at this time.", "error");
+				});
+			}
 		},
 		methods: {
 			submitField() {
@@ -282,6 +296,15 @@
 		watch : {
 			'field.type': function(val){
 				this.isOptionType = val == "Options";
+			}
+		},
+		computed: {
+			isCreating(){
+				return (!this.$route.params.id)
+			},
+			theIdea(){
+				let id = this.$route.params.id;
+				console.log(this.$store.getters.getIdeas);
 			}
 		}
 	}
