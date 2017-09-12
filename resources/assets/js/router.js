@@ -1,15 +1,15 @@
 import VueRouter from 'vue-router';
 import HomeComponent from './components/HomeComponent';
-import CreateIdeaComponent from './components/CreateIdeaComponent';
-import ViewIdeasComponent from './components/views/ViewIdeasComponent';
+import CreateCollectionComponent from './components/CreateCollectionComponent';
+import ViewCollectionsComponent from './components/views/ViewCollectionsComponent';
 
 Vue.use(VueRouter);
 
 const routes = [
 	{ path: '/', component: HomeComponent },
-	{ path: '/ideas', component: ViewIdeasComponent },
-	{ path: '/ideas/create', component: CreateIdeaComponent },
-	{ path: '/ideas/view/:id', component: CreateIdeaComponent },
+	{ path: '/collections', component: ViewCollectionsComponent },
+	{ path: '/collections/create', component: CreateCollectionComponent },
+	{ path: '/collections/view/:id', component: CreateCollectionComponent },
 	{ path: '/messages', component: HomeComponent },
 	{ path: '/plugins', component: HomeComponent },
 	{ path: '/support', component: HomeComponent },

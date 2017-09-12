@@ -143,6 +143,7 @@
 					right: 0;
 					cursor:auto;
 					height:auto;
+					z-index:10;
 					&.small{
 						width: 200px;
 						.profile{

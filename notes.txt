@@ -1,3 +1,18 @@
+10/09/2017
+09:00 - Created the collections-bried query - decided to completely eradicate departments and categories.
+I will instead get the user to departmentalise their staff, and then set permissions (for read, write, and view) on each department
+for each collection. I thought it seemed tedious at first, but you don't create collections very often so... it doesn't hurt to configure
+access settings when creating one.. 
+********I guess I can add a mass-access configurating page later or something to allow the user to apply access settings to multiple or all collections.
+06:19 - Make an /api/get/all-collections endpoint or something, where you get literally everything you'll need. Then when the view component is mounted, just filter out the couple of things 
+23:26 - Ok, editing fields works but there's a duplication error ... try editing one, then edit the other. They both take the same values (only in vuex & frontend not backend ... debug it and figure out why)
+
+08/09/2017 
+ - "SELECT collections.name as 'collection_name', permissions.permission FROM collections LEFT JOIN permissions"
+ Working on SQL query to basically get back all collections that the current user ISNT banned from viewing...
+ But how do I restrict whether or not they can click on it etc.? :/
+
+
 1/09/2017 #Eid
 
 

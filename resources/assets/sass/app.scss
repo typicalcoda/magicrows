@@ -8,7 +8,7 @@
 }
 .no-pad{padding-left:0;padding-right:0;}
 .blue{
-	background:blue;
+	background:#71a9f3;
 }
 a,a:focus,a:hover,a:active{
 	text-decoration: none;
@@ -170,13 +170,17 @@ body,html, .app{
 			padding-bottom: 15px;
 			margin-bottom: 30px;
 		}
-		.field-type{
-			background: #d2a991;
-			color: white;
-			padding: 1px 3px;
+		.badge{
+			background: #e2e2e2;
+			color: #adadad;
+			padding: 2px 5px;
 			border-radius: 6px;
 			font-size: 11px;
-			text-transform: lowercase;;
+			text-transform: lowercase;
+			&.green{
+				background:#83ab83;
+				color:#fff;
+			}
 		}
 		.clickable{
 			color: #6eb2d4;

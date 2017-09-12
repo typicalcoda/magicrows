@@ -3,68 +3,40 @@
 
 		<div class="title">
 			<i class="fa fa-bolt"></i>
-			<span>{{isCreating ? 'Create a new' : 'Editing' }} Idea</span>
+			<span> {{editMode ? 'Editing' : 'Create a new'}} Collection</span>
 		</div>
 
-		<div class="panel">
+		<div class="panel" v-if="theCollection">
 			<div class="heading bottom-line">
-				<span v-if="isCreating">Create a new Idea</span>
-				<span v-else>Editing <b>{{idea.name}}</b></span>
-				<i class="fa fa-trash pull-right"></i>
+				<span> {{editMode ? 'Editing' : 'Create a new'}} collection</span>
 			</div>
 			<div class="div container-fluid none">
 				<div class="col-md-6">
 					<div class="row line-space">
 						<div class="input">
-							<label>Idea name*</label>
-							<input type="text" v-model="idea.name">
+							<label>Collection name*</label>
+							<input type="text" v-if="theCollection" v-model="theCollection.name">
 						</div>
 					</div>
 					<div class="row line-space">
 						<div class="input">
-							<label>Idea description</label>
-							<textarea v-model="idea.description"></textarea>
+							<label>Collection description</label>
+							<textarea v-if="theCollection" v-model="theCollection.description"></textarea>
 						</div>
 					</div>
 					<div class="row line-space">
 						<div class="row">
-							<div class="col-md-4">
-								<div class="input">
-									<label>Select Category</label>
-									<select v-model="idea.category">
-
-									</select>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="input">
-									<label>Access Level</label>
-									<select v-model="idea.accessLvl">
-										<option value="">Level 1</option>
-										<option value="">Level 2</option>
-										<option value="">Level 3</option>
-										<option value="">Level 4</option>
-										<option value="">Level 5</option>
-										<option value="">Level 6</option>
-										<option value="">Level 7</option>
-										<option value="">Level 8</option>
-										<option value="">Level 9</option>
-										<option value="">Level 10</option>
-										<option value="">With Auth</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-md-4">
+							<div class="col-md-12">
 								<div class="input">
 									<label>Max # of Records</label>
-									<input type="text" v-model="idea.maxRecords">
+									<input type="text" v-if="theCollection" v-model="theCollection.maxRecords">
 								</div>
 							</div>
 						</div>
 					</div>
 
 					<div class="row">
-						<div class="heading">Idea fields</div>
+						<div class="heading">Collection fields</div>
 					</div>
 					<div class="row">
 						<div class="col-md-11">
@@ -173,9 +145,9 @@
 						</thead>
 
 						<tbody>
-							<tr v-for="f in idea.fields">
+							<tr v-if="theCollection" v-for="f in theCollection.fields">
 								<td><span class="clickable" @click="editField(f)">{{f.name}}</span></td>
-								<td><span class="field-type">{{f.type}}</span></td>
+								<td><span class="badge">{{f.type}}</span></td>
 								<td>--:--</td>
 								<td>--:--</td>
 							</tr>
@@ -185,8 +157,8 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					<router-link to="/ideas"><button class="button">Return</button></router-link>
-					<button class="button green" @click="createIdea">Create</button>
+					<router-link to="/collections"><button class="button">Return</button></router-link>
+					<button class="button" :class="editMode ? 'blue' : 'green'" @click="createCollection">{{editMode ? 'Save' : 'Create'}}</button>
 				</div>
 			</div>
 		</div>
@@ -214,67 +186,51 @@
 					updated_at: '',
 					deleted_at: ''
 				},
-				idea: {
-					name: '',
-					description: '',
-					category: 0,
-					accessLvl: 0,
-					maxRecords: 0,
-					created_at: '',
-					updated_at: '',
-					deleted_at: '',
-					fields: []
-				}
+				collection: {}
 			}
 		},
 		mounted(){
-			let scope = this
-			if(scope.$store.getters.getIdeas.length == 0){
-				axios.get('api/get/ideas/')
-				.then(function(res){
-					scope.$store.dispatch('saveIdeas', res.data)
-				})
-				.catch(function(err){
-					swal("An error ocurred", "Could not fetch ideas", "error")
-				})
-			}
-
-			if(!this.isCreating)
-			{
-				axios.get('/api/get/idea/' + this.$route.params.id)
-				.then( function(res){
-					console.log(res.data);
-				})
-				.catch( function(err){
-					swal("An error occurred", "Idea details could not be fetched at this time.", "error");
-				});
-			}
 		},
 		methods: {
 			submitField() {
-				let f = this.field;
-				if(f.name.length > 0 && f.type){
-					if(!this.editingField)
-					{
-						if(!this.idea.fields.find(x=>x.name == f.name))
-						{
-							this.idea.fields.push(f); 
-							this.field = {};
-						}
-						else 
-							swal("Duplicate field detected", "A field with that name already exists, try giving it a different name.", "error")
-					} else {
-						let theField = this.idea.fields.find(x=>x.name == this.originalFieldName);
-						for(var prop in theField){
-							if(theField.hasOwnProperty(prop))
-								theField[prop] = this.field[prop]
-						}
+				let scope = this;
+				if(this.editMode){
+					if(this.theCollection.CAN_WRITE == 0)
+						swal("Access denied", "You don't have the authority to edit this collection. Please see your admin", "error" );
+					else {
+						let f = this.field;
+						if(f.name.length > 0 && f.type){
+							if(!this.editingField)
+							{
+								if(!this.theCollection.fields.find(x=>x.name == f.name))
+								{
+									this.theCollection.fields.push(f); 
+									this.field = {};
+								}
+								else {
+									swal("Duplicate field detected",
+										"A field with that name already exists, try giving it a different name.", "error")
+								}
+							} else {
+								let theField = this.theCollection.fields.find(x=>x.name == this.originalFieldName);
 
-						this.editingField = false;
-						this.field = {};
-					} 
-				} else 
-				swal("Empty input", "Please specify at least a name and a type the field.", "error" );
+								console.log("The field that will be updated: " + theField.name + ", id being " + theField.id);
+								axios.put('/api/save/field', { id: theField.id, newValues: this.field })
+								.then( function(res){
+									scope.$store.dispatch('saveField', res.data)
+								})
+								.catch( function(err){
+									console.log(err);
+								});
+
+								this.editingField = false;
+								this.field = {};
+								this.originalFieldName = "";
+							} 
+						} else 
+						swal("Empty input", "Please specify at least a name and a type the field.", "error" );
+					}
+				}
 			},
 			editField(f){
 				this.field = _.cloneDeep(f);
@@ -285,11 +241,16 @@
 				this.field = {};
 				this.editingField = false;
 			},
-			createIdea(){
-				if(this.idea.name){
-					let ideas = this.$store.getters.getIdeas;
-				}				 else {
-					swal("Empty fields", "Please make sure you fill in all required fields", "error");
+			createCollection(){
+				if(this.editMode){
+					if(this.theCollection.CAN_WRITE == 0)
+						swal("Access denied", "You don't have the authority to edit this collection. Please see your admin", "error" );
+					else {
+					}
+				} else {
+					// Ok, a fresh collection is being created but make sure you have rights
+
+
 				}
 			}
 		},
@@ -299,12 +260,12 @@
 			}
 		},
 		computed: {
-			isCreating(){
-				return (!this.$route.params.id)
+			editMode(){
+				return this.$route.params.id;
 			},
-			theIdea(){
+			theCollection(){
 				let id = this.$route.params.id;
-				console.log(this.$store.getters.getIdeas);
+				return id ? this.$store.getters.getCollections.find(c => c.id.toLowerCase() == id.toLowerCase()) : this.collection;
 			}
 		}
 	}

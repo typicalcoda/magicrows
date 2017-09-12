@@ -10621,7 +10621,19 @@ var app = new Vue({
 		'side-bar': __WEBPACK_IMPORTED_MODULE_4__components_SidebarComponent___default.a
 	},
 	router: __WEBPACK_IMPORTED_MODULE_2__router__["a" /* default */],
-	store: __WEBPACK_IMPORTED_MODULE_1__store__["a" /* default */]
+	store: __WEBPACK_IMPORTED_MODULE_1__store__["a" /* default */],
+	mounted: function mounted() {
+		var scope = this;
+		if (scope.$store.getters.getCollections.length == 0) {
+			axios.get('/api/get/collections/').then(function (res) {
+				scope.$store.dispatch('saveCollections', res.data);
+				console.log("Got collections");
+				console.log(res.data);
+			}).catch(function (err) {
+				swal("An error ocurred", "Could not fetch collections", "error");
+			});
+		}
+	}
 });
 
 /***/ }),
@@ -39827,23 +39839,37 @@ process.umask = function() { return 0; };
 var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 
 	state: {
-		ideas: []
+		collections: []
 	},
 	mutations: {
-		setIdeas: function setIdeas(state, ideas) {
-			state.ideas = ideas;
+		setCollections: function setCollections(state, collections) {
+			state.collections = collections;
+		},
+		setField: function setField(state, field) {
+			var collection = state.collections.find(function (c) {
+				return c.id.toLowerCase() == field.collection_id.toLowerCase();
+			});
+			var oldField = collection.fields.find(function (f) {
+				return f.id.toLowerCase() == field.id.toLowerCase();
+			});
+			collection.fields.splice(oldField, 1, field);
 		}
 	},
 	getters: {
-		getIdeas: function getIdeas(state) {
-			return state.ideas;
+		getCollections: function getCollections(state) {
+			return state.collections;
 		}
 	},
 	actions: {
-		saveIdeas: function saveIdeas(_ref, ideas) {
+		saveCollections: function saveCollections(_ref, collections) {
 			var commit = _ref.commit;
 
-			commit('setIdeas', ideas);
+			commit('setCollections', collections);
+		},
+		saveField: function saveField(_ref2, field) {
+			var commit = _ref2.commit;
+
+			commit('setField', field);
 		}
 	}
 
@@ -40753,10 +40779,10 @@ var index_esm = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_HomeComponent__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_HomeComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_HomeComponent__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_CreateIdeaComponent__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_CreateIdeaComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_CreateIdeaComponent__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_views_ViewIdeasComponent__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_views_ViewIdeasComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_views_ViewIdeasComponent__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_CreateCollectionComponent__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_CreateCollectionComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_CreateCollectionComponent__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_views_ViewCollectionsComponent__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_views_ViewCollectionsComponent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_views_ViewCollectionsComponent__);
 
 
 
@@ -40764,7 +40790,7 @@ var index_esm = {
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]);
 
-var routes = [{ path: '/', component: __WEBPACK_IMPORTED_MODULE_1__components_HomeComponent___default.a }, { path: '/ideas', component: __WEBPACK_IMPORTED_MODULE_3__components_views_ViewIdeasComponent___default.a }, { path: '/ideas/create', component: __WEBPACK_IMPORTED_MODULE_2__components_CreateIdeaComponent___default.a }, { path: '/ideas/view/:id', component: __WEBPACK_IMPORTED_MODULE_2__components_CreateIdeaComponent___default.a }, { path: '/messages', component: __WEBPACK_IMPORTED_MODULE_1__components_HomeComponent___default.a }, { path: '/plugins', component: __WEBPACK_IMPORTED_MODULE_1__components_HomeComponent___default.a }, { path: '/support', component: __WEBPACK_IMPORTED_MODULE_1__components_HomeComponent___default.a }, { path: '/settings', component: __WEBPACK_IMPORTED_MODULE_1__components_HomeComponent___default.a }];
+var routes = [{ path: '/', component: __WEBPACK_IMPORTED_MODULE_1__components_HomeComponent___default.a }, { path: '/collections', component: __WEBPACK_IMPORTED_MODULE_3__components_views_ViewCollectionsComponent___default.a }, { path: '/collections/create', component: __WEBPACK_IMPORTED_MODULE_2__components_CreateCollectionComponent___default.a }, { path: '/collections/view/:id', component: __WEBPACK_IMPORTED_MODULE_2__components_CreateCollectionComponent___default.a }, { path: '/messages', component: __WEBPACK_IMPORTED_MODULE_1__components_HomeComponent___default.a }, { path: '/plugins', component: __WEBPACK_IMPORTED_MODULE_1__components_HomeComponent___default.a }, { path: '/support', component: __WEBPACK_IMPORTED_MODULE_1__components_HomeComponent___default.a }, { path: '/settings', component: __WEBPACK_IMPORTED_MODULE_1__components_HomeComponent___default.a }];
 
 var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
 	mode: 'history',
@@ -43307,7 +43333,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "E:\\magicrows\\resources\\assets\\js\\components\\HomeComponent.vue"
+Component.options.__file = "F:\\magicrows\\resources\\assets\\js\\components\\HomeComponent.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] HomeComponent.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -43450,13 +43476,13 @@ var Component = __webpack_require__(2)(
   /* styles */
   injectStyle,
   /* scopeId */
-  "data-v-5846b96c",
+  "data-v-4ff822b6",
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "E:\\magicrows\\resources\\assets\\js\\components\\CreateIdeaComponent.vue"
+Component.options.__file = "F:\\magicrows\\resources\\assets\\js\\components\\CreateCollectionComponent.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] CreateIdeaComponent.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] CreateCollectionComponent.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -43465,9 +43491,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5846b96c", Component.options)
+    hotAPI.createRecord("data-v-4ff822b6", Component.options)
   } else {
-    hotAPI.reload("data-v-5846b96c", Component.options)
+    hotAPI.reload("data-v-4ff822b6", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -43488,13 +43514,13 @@ var content = __webpack_require__(25);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(1)("d4531fb2", content, false);
+var update = __webpack_require__(1)("0a13323d", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5846b96c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreateIdeaComponent.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5846b96c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreateIdeaComponent.vue");
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4ff822b6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreateCollectionComponent.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4ff822b6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CreateCollectionComponent.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -43512,7 +43538,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.btn-opts[data-v-5846b96c] {\n  padding-top: 24px;\n}\n", ""]);
+exports.push([module.i, "\n.btn-opts[data-v-4ff822b6] {\n  padding-top: 24px;\n}\n", ""]);
 
 // exports
 
@@ -43523,34 +43549,6 @@ exports.push([module.i, "\n.btn-opts[data-v-5846b96c] {\n  padding-top: 24px;\n}
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -43739,63 +43737,48 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				updated_at: '',
 				deleted_at: ''
 			},
-			idea: {
-				name: '',
-				description: '',
-				category: 0,
-				accessLvl: 0,
-				maxRecords: 0,
-				created_at: '',
-				updated_at: '',
-				deleted_at: '',
-				fields: []
-			}
+			collection: {}
 		};
 	},
-	mounted: function mounted() {
-		var scope = this;
-		if (scope.$store.getters.getIdeas.length == 0) {
-			axios.get('api/get/ideas/').then(function (res) {
-				scope.$store.dispatch('saveIdeas', res.data);
-			}).catch(function (err) {
-				swal("An error ocurred", "Could not fetch ideas", "error");
-			});
-		}
-
-		if (!this.isCreating) {
-			axios.get('/api/get/idea/' + this.$route.params.id).then(function (res) {
-				console.log(res.data);
-			}).catch(function (err) {
-				swal("An error occurred", "Idea details could not be fetched at this time.", "error");
-			});
-		}
-	},
+	mounted: function mounted() {},
 
 	methods: {
 		submitField: function submitField() {
 			var _this = this;
 
-			var f = this.field;
-			if (f.name.length > 0 && f.type) {
-				if (!this.editingField) {
-					if (!this.idea.fields.find(function (x) {
-						return x.name == f.name;
-					})) {
-						this.idea.fields.push(f);
-						this.field = {};
-					} else swal("Duplicate field detected", "A field with that name already exists, try giving it a different name.", "error");
-				} else {
-					var theField = this.idea.fields.find(function (x) {
-						return x.name == _this.originalFieldName;
-					});
-					for (var prop in theField) {
-						if (theField.hasOwnProperty(prop)) theField[prop] = this.field[prop];
-					}
+			var scope = this;
+			if (this.editMode) {
+				if (this.theCollection.CAN_WRITE == 0) swal("Access denied", "You don't have the authority to edit this collection. Please see your admin", "error");else {
+					var f = this.field;
+					if (f.name.length > 0 && f.type) {
+						if (!this.editingField) {
+							if (!this.theCollection.fields.find(function (x) {
+								return x.name == f.name;
+							})) {
+								this.theCollection.fields.push(f);
+								this.field = {};
+							} else {
+								swal("Duplicate field detected", "A field with that name already exists, try giving it a different name.", "error");
+							}
+						} else {
+							var theField = this.theCollection.fields.find(function (x) {
+								return x.name == _this.originalFieldName;
+							});
 
-					this.editingField = false;
-					this.field = {};
+							console.log("The field that will be updated: " + theField.name + ", id being " + theField.id);
+							axios.put('/api/save/field', { id: theField.id, newValues: this.field }).then(function (res) {
+								scope.$store.dispatch('saveField', res.data);
+							}).catch(function (err) {
+								console.log(err);
+							});
+
+							this.editingField = false;
+							this.field = {};
+							this.originalFieldName = "";
+						}
+					} else swal("Empty input", "Please specify at least a name and a type the field.", "error");
 				}
-			} else swal("Empty input", "Please specify at least a name and a type the field.", "error");
+			}
 		},
 		editField: function editField(f) {
 			this.field = _.cloneDeep(f);
@@ -43806,11 +43789,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.field = {};
 			this.editingField = false;
 		},
-		createIdea: function createIdea() {
-			if (this.idea.name) {
-				var ideas = this.$store.getters.getIdeas;
+		createCollection: function createCollection() {
+			if (this.editMode) {
+				if (this.theCollection.CAN_WRITE == 0) swal("Access denied", "You don't have the authority to edit this collection. Please see your admin", "error");else {}
 			} else {
-				swal("Empty fields", "Please make sure you fill in all required fields", "error");
+				// Ok, a fresh collection is being created but make sure you have rights
+
+
 			}
 		}
 	},
@@ -43820,12 +43805,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		}
 	},
 	computed: {
-		isCreating: function isCreating() {
-			return !this.$route.params.id;
+		editMode: function editMode() {
+			return this.$route.params.id;
 		},
-		theIdea: function theIdea() {
+		theCollection: function theCollection() {
 			var id = this.$route.params.id;
-			console.log(this.$store.getters.getIdeas);
+			return id ? this.$store.getters.getCollections.find(function (c) {
+				return c.id.toLowerCase() == id.toLowerCase();
+			}) : this.collection;
 		}
 	}
 });
@@ -43841,13 +43828,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "title"
   }, [_c('i', {
     staticClass: "fa fa-bolt"
-  }), _vm._v(" "), _c('span', [_vm._v(_vm._s(_vm.isCreating ? 'Create a new' : 'Editing') + " Idea")])]), _vm._v(" "), _c('div', {
+  }), _vm._v(" "), _c('span', [_vm._v(" " + _vm._s(_vm.editMode ? 'Editing' : 'Create a new') + " Collection")])]), _vm._v(" "), (_vm.theCollection) ? _c('div', {
     staticClass: "panel"
   }, [_c('div', {
     staticClass: "heading bottom-line"
-  }, [(_vm.isCreating) ? _c('span', [_vm._v("Create a new Idea")]) : _c('span', [_vm._v("Editing "), _c('b', [_vm._v(_vm._s(_vm.idea.name))])]), _vm._v(" "), _c('i', {
-    staticClass: "fa fa-trash pull-right"
-  })]), _vm._v(" "), _c('div', {
+  }, [_c('span', [_vm._v(" " + _vm._s(_vm.editMode ? 'Editing' : 'Create a new') + " collection")])]), _vm._v(" "), _c('div', {
     staticClass: "div container-fluid none"
   }, [_c('div', {
     staticClass: "col-md-6"
@@ -43855,161 +43840,73 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "row line-space"
   }, [_c('div', {
     staticClass: "input"
-  }, [_c('label', [_vm._v("Idea name*")]), _vm._v(" "), _c('input', {
+  }, [_c('label', [_vm._v("Collection name*")]), _vm._v(" "), (_vm.theCollection) ? _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.idea.name),
-      expression: "idea.name"
+      value: (_vm.theCollection.name),
+      expression: "theCollection.name"
     }],
     attrs: {
       "type": "text"
     },
     domProps: {
-      "value": (_vm.idea.name)
+      "value": (_vm.theCollection.name)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.idea.name = $event.target.value
+        _vm.theCollection.name = $event.target.value
       }
     }
-  })])]), _vm._v(" "), _c('div', {
+  }) : _vm._e()])]), _vm._v(" "), _c('div', {
     staticClass: "row line-space"
   }, [_c('div', {
     staticClass: "input"
-  }, [_c('label', [_vm._v("Idea description")]), _vm._v(" "), _c('textarea', {
+  }, [_c('label', [_vm._v("Collection description")]), _vm._v(" "), (_vm.theCollection) ? _c('textarea', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.idea.description),
-      expression: "idea.description"
+      value: (_vm.theCollection.description),
+      expression: "theCollection.description"
     }],
     domProps: {
-      "value": (_vm.idea.description)
+      "value": (_vm.theCollection.description)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.idea.description = $event.target.value
+        _vm.theCollection.description = $event.target.value
       }
     }
-  })])]), _vm._v(" "), _c('div', {
+  }) : _vm._e()])]), _vm._v(" "), _c('div', {
     staticClass: "row line-space"
   }, [_c('div', {
     staticClass: "row"
   }, [_c('div', {
-    staticClass: "col-md-4"
+    staticClass: "col-md-12"
   }, [_c('div', {
     staticClass: "input"
-  }, [_c('label', [_vm._v("Select Category")]), _vm._v(" "), _c('select', {
+  }, [_c('label', [_vm._v("Max # of Records")]), _vm._v(" "), (_vm.theCollection) ? _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.idea.category),
-      expression: "idea.category"
-    }],
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.idea.category = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "input"
-  }, [_c('label', [_vm._v("Access Level")]), _vm._v(" "), _c('select', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.idea.accessLvl),
-      expression: "idea.accessLvl"
-    }],
-    on: {
-      "change": function($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
-          return o.selected
-        }).map(function(o) {
-          var val = "_value" in o ? o._value : o.value;
-          return val
-        });
-        _vm.idea.accessLvl = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-      }
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": ""
-    }
-  }, [_vm._v("Level 1")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": ""
-    }
-  }, [_vm._v("Level 2")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": ""
-    }
-  }, [_vm._v("Level 3")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": ""
-    }
-  }, [_vm._v("Level 4")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": ""
-    }
-  }, [_vm._v("Level 5")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": ""
-    }
-  }, [_vm._v("Level 6")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": ""
-    }
-  }, [_vm._v("Level 7")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": ""
-    }
-  }, [_vm._v("Level 8")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": ""
-    }
-  }, [_vm._v("Level 9")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": ""
-    }
-  }, [_vm._v("Level 10")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": ""
-    }
-  }, [_vm._v("With Auth")])])])]), _vm._v(" "), _c('div', {
-    staticClass: "col-md-4"
-  }, [_c('div', {
-    staticClass: "input"
-  }, [_c('label', [_vm._v("Max # of Records")]), _vm._v(" "), _c('input', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.idea.maxRecords),
-      expression: "idea.maxRecords"
+      value: (_vm.theCollection.maxRecords),
+      expression: "theCollection.maxRecords"
     }],
     attrs: {
       "type": "text"
     },
     domProps: {
-      "value": (_vm.idea.maxRecords)
+      "value": (_vm.theCollection.maxRecords)
     },
     on: {
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.idea.maxRecords = $event.target.value
+        _vm.theCollection.maxRecords = $event.target.value
       }
     }
-  })])])])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('div', {
+  }) : _vm._e()])])])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-11"
@@ -44323,8 +44220,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "cellpadding": "0",
       "cellspacing": "0"
     }
-  }, [_vm._m(2), _vm._v(" "), _c('tbody', _vm._l((_vm.idea.fields), function(f) {
-    return _c('tr', [_c('td', [_c('span', {
+  }, [_vm._m(2), _vm._v(" "), _c('tbody', _vm._l((_vm.theCollection.fields), function(f) {
+    return (_vm.theCollection) ? _c('tr', [_c('td', [_c('span', {
       staticClass: "clickable",
       on: {
         "click": function($event) {
@@ -44332,30 +44229,31 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     }, [_vm._v(_vm._s(f.name))])]), _vm._v(" "), _c('td', [_c('span', {
-      staticClass: "field-type"
-    }, [_vm._v(_vm._s(f.type))])]), _vm._v(" "), _c('td', [_vm._v("--:--")]), _vm._v(" "), _c('td', [_vm._v("--:--")])])
+      staticClass: "badge"
+    }, [_vm._v(_vm._s(f.type))])]), _vm._v(" "), _c('td', [_vm._v("--:--")]), _vm._v(" "), _c('td', [_vm._v("--:--")])]) : _vm._e()
   }))])])]), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-md-12"
   }, [_c('router-link', {
     attrs: {
-      "to": "/ideas"
+      "to": "/collections"
     }
   }, [_c('button', {
     staticClass: "button"
   }, [_vm._v("Return")])]), _vm._v(" "), _c('button', {
-    staticClass: "button green",
+    staticClass: "button",
+    class: _vm.editMode ? 'blue' : 'green',
     on: {
-      "click": _vm.createIdea
+      "click": _vm.createCollection
     }
-  }, [_vm._v("Create")])], 1)])])])
+  }, [_vm._v(_vm._s(_vm.editMode ? 'Save' : 'Create'))])], 1)])]) : _vm._e()])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "row"
   }, [_c('div', {
     staticClass: "heading"
-  }, [_vm._v("Idea fields")])])
+  }, [_vm._v("Collection fields")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('button', [_c('i', {
     staticClass: "fa fa-plus"
@@ -44383,7 +44281,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-5846b96c", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-4ff822b6", module.exports)
   }
 }
 
@@ -44404,13 +44302,13 @@ var Component = __webpack_require__(2)(
   /* styles */
   injectStyle,
   /* scopeId */
-  "data-v-1c0d44f5",
+  "data-v-53602f5c",
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "E:\\magicrows\\resources\\assets\\js\\components\\views\\ViewIdeasComponent.vue"
+Component.options.__file = "F:\\magicrows\\resources\\assets\\js\\components\\views\\ViewCollectionsComponent.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] ViewIdeasComponent.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] ViewCollectionsComponent.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -44419,9 +44317,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-1c0d44f5", Component.options)
+    hotAPI.createRecord("data-v-53602f5c", Component.options)
   } else {
-    hotAPI.reload("data-v-1c0d44f5", Component.options)
+    hotAPI.reload("data-v-53602f5c", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -44442,13 +44340,13 @@ var content = __webpack_require__(30);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(1)("732958b6", content, false);
+var update = __webpack_require__(1)("0ceb2b8e", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1c0d44f5\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ViewIdeasComponent.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1c0d44f5\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ViewIdeasComponent.vue");
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-53602f5c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ViewCollectionsComponent.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-53602f5c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/sass-loader/lib/loader.js!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./ViewCollectionsComponent.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -44466,7 +44364,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "\ntable tbody tr[data-v-53602f5c] {\n  height: 30px;\n}\n", ""]);
 
 // exports
 
@@ -44511,30 +44409,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
-		return {
-			ideas: []
-		};
-	},
-	mounted: function mounted() {
-		var scope = this;
-		console.log("Getting ideas");
-		axios.get('api/get/ideas-brief').then(function (res) {
-			scope.$store.dispatch('saveIdeas', res.data);
-			scope.ideas = scope.$store.getters.getIdeas;
-			console.log(scope.ideas);
-		}).catch(function (err) {
-			swal("An error ocurred", "Could not fetch ideas", "error");
-		});
+		return {};
 	},
 
 	methods: {
-		viewIdea: function viewIdea(id) {
-			this.$router.push('/ideas/view/' + id.toLowerCase());
+		viewCollection: function viewCollection(id) {
+			if (this.collections.find(function (c) {
+				return c.id == id;
+			}) && this.collections.find(function (c) {
+				return c.id == id;
+			}).CAN_VIEW == "1") this.$router.push('/collections/view/' + id.toLowerCase());else swal("No access.", "You don't have permission to view this collection. Please see your administrator.", "error");
+		}
+	},
+	computed: {
+		collections: function collections() {
+			return this.$store.getters.getCollections;
 		}
 	}
 });
@@ -44553,9 +44445,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticStyle: {
       "margin-bottom": "21px"
     }
-  }, [_vm._v("Total - "), _c('b', [_vm._v(_vm._s(_vm.$store.getters.getIdeas.length))]), _vm._v("\n\t\t\t" + _vm._s(_vm.$store.getters.getIdeas.length == 1 ? 'Idea' : 'Ideas') + "\n\t\t")]), _vm._v(" "), _c('router-link', {
+  }, [_vm._v("Total - "), _c('b', [_vm._v(_vm._s(_vm.$store.getters.getCollections.length))]), _vm._v("\n\t\t\t" + _vm._s(_vm.$store.getters.getCollections.length == 1 ? 'Collection' : 'Collections') + "\n\t\t")]), _vm._v(" "), _c('router-link', {
     attrs: {
-      "to": "/ideas/create"
+      "to": "/collections/create"
     }
   }, [_c('button', {
     staticClass: "button green",
@@ -44568,38 +44460,32 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "cellpadding": "0",
       "cellspacing": "0"
     }
-  }, [_vm._m(1), _vm._v(" "), _c('tbody', _vm._l((_vm.ideas), function(idea) {
+  }, [_vm._m(1), _vm._v(" "), _c('tbody', _vm._l((_vm.collections), function(collection) {
     return _c('tr', [_c('td', [_c('span', {
       staticClass: "clickable",
       on: {
         "click": function($event) {
-          _vm.viewIdea(idea.id)
+          _vm.viewCollection(collection.id)
         }
       }
-    }, [_vm._v(_vm._s(idea.name))])]), _vm._v(" "), _c('td', [_vm._v("[" + _vm._s(idea.category) + "]")]), _vm._v(" "), _c('td', [_vm._v(_vm._s(idea.access_lvl))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(idea.created_at) + " by "), _c('span', {
-      staticClass: "clickable"
-    }, [_vm._v(_vm._s(idea.user))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(idea.updated_at ? idea.updated_at : 'No updates.'))])])
+    }, [_vm._v(_vm._s(collection.name))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(collection.active_records))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(collection.created_at))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(collection.updated_at))])])
   }))])], 1)])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "title"
   }, [_c('i', {
     staticClass: "fa fa-bolt"
-  }), _vm._v(" "), _c('span', [_vm._v("Browse Ideas")])])
+  }), _vm._v(" "), _c('span', [_vm._v("Browse Collections")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', [_c('th', {
     staticStyle: {
       "width": "16.666666%"
     }
-  }, [_vm._v("Idea name")]), _vm._v(" "), _c('th', {
+  }, [_vm._v("Collection name")]), _vm._v(" "), _c('th', {
     staticStyle: {
       "width": "16.666666%"
     }
-  }, [_vm._v("Category")]), _vm._v(" "), _c('th', {
-    staticStyle: {
-      "width": "16.666666%"
-    }
-  }, [_vm._v("Access Level")]), _vm._v(" "), _c('th', {
+  }, [_vm._v("Active Records")]), _vm._v(" "), _c('th', {
     staticStyle: {
       "width": "16.666666%"
     }
@@ -44607,13 +44493,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticStyle: {
       "width": "16.666666%"
     }
-  }, [_vm._v("Updated at")])])
+  }, [_vm._v("Last Updated")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-1c0d44f5", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-53602f5c", module.exports)
   }
 }
 
@@ -44638,7 +44524,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "E:\\magicrows\\resources\\assets\\js\\components\\TopBarComponent.vue"
+Component.options.__file = "F:\\magicrows\\resources\\assets\\js\\components\\TopBarComponent.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] TopBarComponent.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -44696,7 +44582,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "\n.burger[data-v-51f793e1] {\n  float: left;\n  line-height: 1.56em;\n  font-size: 25px;\n  color: #ccc;\n  cursor: pointer;\n}\n.top[data-v-51f793e1] {\n  font-family: 'Ubuntu', sans-serif;\n  width: calc(100% - 260px);\n  height: 40px;\n  float: right;\n  background: #333;\n  padding: 0 15px;\n}\n.top .logo[data-v-51f793e1] {\n    height: 100%;\n    width: 25px;\n    height: 100px;\n    background: #232323;\n}\n.top .logo img[data-v-51f793e1] {\n      width: 100%;\n      padding: 0 59px;\n      position: absolute;\n      top: 50%;\n      transform: translateY(-50%);\n}\n.top .menu[data-v-51f793e1] {\n    padding: 0;\n    margin: 0;\n    float: right;\n    height: 100%;\n    line-height: 2.3em;\n}\n.top .menu > li[data-v-51f793e1] {\n      display: inline-block;\n      height: 100%;\n      padding: 0 12px;\n      margin-right: -4px;\n      transition: .4s;\n      cursor: pointer;\n      position: relative;\n}\n.top .menu > li.active[data-v-51f793e1] {\n        background: #232323;\n}\n.top .menu > li[data-v-51f793e1]:hover {\n        background: #232323;\n}\n.top .menu > li > span[data-v-51f793e1] {\n        font-size: 14px;\n}\n.top .menu > li > span i[data-v-51f793e1] {\n          font-size: 12px;\n          padding-left: 3px;\n}\n.top .menu > li .dropdown[data-v-51f793e1] {\n        background: #424242;\n        position: absolute;\n        height: 100%;\n        top: 40px;\n        width: 400px;\n        right: 0;\n        cursor: auto;\n        height: auto;\n}\n.top .menu > li .dropdown.small[data-v-51f793e1] {\n          width: 200px;\n}\n.top .menu > li .dropdown.small .profile ul[data-v-51f793e1] {\n            margin: 0;\n            padding: 0;\n}\n.top .menu > li .dropdown.small .profile ul li[data-v-51f793e1] {\n              list-style-type: none;\n              font-size: 13px;\n              color: #888888;\n              padding: 4px 15px;\n              border-bottom: 1px solid #505050;\n              cursor: pointer;\n              transition: .4s;\n}\n.top .menu > li .dropdown.small .profile ul li[data-v-51f793e1]:hover {\n                background: #353535;\n}\n.top .menu > li .dropdown .header[data-v-51f793e1] {\n          background: #232323;\n          padding: 0 10px;\n}\n.top .menu > li .dropdown .header .left[data-v-51f793e1] {\n            font-size: 12px;\n            color: #a7a7a7;\n}\n.top .menu > li .dropdown .footer[data-v-51f793e1] {\n          width: 100%;\n          background: #333333;\n          text-align: center;\n          font-size: 12px;\n          color: #868686;\n}\n.top .menu > li .dropdown .footer .more[data-v-51f793e1] {\n            color: #7b7b7b;\n            text-decoration: none;\n            border-bottom: 1px solid #7b7b7b;\n            padding-bottom: 2px;\n}\n", ""]);
+exports.push([module.i, "\n.burger[data-v-51f793e1] {\n  float: left;\n  line-height: 1.56em;\n  font-size: 25px;\n  color: #ccc;\n  cursor: pointer;\n}\n.top[data-v-51f793e1] {\n  font-family: 'Ubuntu', sans-serif;\n  width: calc(100% - 260px);\n  height: 40px;\n  float: right;\n  background: #333;\n  padding: 0 15px;\n}\n.top .logo[data-v-51f793e1] {\n    height: 100%;\n    width: 25px;\n    height: 100px;\n    background: #232323;\n}\n.top .logo img[data-v-51f793e1] {\n      width: 100%;\n      padding: 0 59px;\n      position: absolute;\n      top: 50%;\n      transform: translateY(-50%);\n}\n.top .menu[data-v-51f793e1] {\n    padding: 0;\n    margin: 0;\n    float: right;\n    height: 100%;\n    line-height: 2.3em;\n}\n.top .menu > li[data-v-51f793e1] {\n      display: inline-block;\n      height: 100%;\n      padding: 0 12px;\n      margin-right: -4px;\n      transition: .4s;\n      cursor: pointer;\n      position: relative;\n}\n.top .menu > li.active[data-v-51f793e1] {\n        background: #232323;\n}\n.top .menu > li[data-v-51f793e1]:hover {\n        background: #232323;\n}\n.top .menu > li > span[data-v-51f793e1] {\n        font-size: 14px;\n}\n.top .menu > li > span i[data-v-51f793e1] {\n          font-size: 12px;\n          padding-left: 3px;\n}\n.top .menu > li .dropdown[data-v-51f793e1] {\n        background: #424242;\n        position: absolute;\n        height: 100%;\n        top: 40px;\n        width: 400px;\n        right: 0;\n        cursor: auto;\n        height: auto;\n        z-index: 10;\n}\n.top .menu > li .dropdown.small[data-v-51f793e1] {\n          width: 200px;\n}\n.top .menu > li .dropdown.small .profile ul[data-v-51f793e1] {\n            margin: 0;\n            padding: 0;\n}\n.top .menu > li .dropdown.small .profile ul li[data-v-51f793e1] {\n              list-style-type: none;\n              font-size: 13px;\n              color: #888888;\n              padding: 4px 15px;\n              border-bottom: 1px solid #505050;\n              cursor: pointer;\n              transition: .4s;\n}\n.top .menu > li .dropdown.small .profile ul li[data-v-51f793e1]:hover {\n                background: #353535;\n}\n.top .menu > li .dropdown .header[data-v-51f793e1] {\n          background: #232323;\n          padding: 0 10px;\n}\n.top .menu > li .dropdown .header .left[data-v-51f793e1] {\n            font-size: 12px;\n            color: #a7a7a7;\n}\n.top .menu > li .dropdown .footer[data-v-51f793e1] {\n          width: 100%;\n          background: #333333;\n          text-align: center;\n          font-size: 12px;\n          color: #868686;\n}\n.top .menu > li .dropdown .footer .more[data-v-51f793e1] {\n            color: #7b7b7b;\n            text-decoration: none;\n            border-bottom: 1px solid #7b7b7b;\n            padding-bottom: 2px;\n}\n", ""]);
 
 // exports
 
@@ -44814,7 +44700,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "E:\\magicrows\\resources\\assets\\js\\components\\EntryComponent.vue"
+Component.options.__file = "F:\\magicrows\\resources\\assets\\js\\components\\EntryComponent.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] EntryComponent.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -45174,7 +45060,7 @@ var Component = __webpack_require__(2)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "E:\\magicrows\\resources\\assets\\js\\components\\SidebarComponent.vue"
+Component.options.__file = "F:\\magicrows\\resources\\assets\\js\\components\\SidebarComponent.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] SidebarComponent.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -45283,11 +45169,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "fa fa-users fa-fw"
   }), _vm._v("Manager Users")])], 1), _vm._v(" "), _c('li', [_c('router-link', {
     attrs: {
-      "to": "/ideas"
+      "to": "/collections"
     }
   }, [_c('i', {
-    staticClass: "fa fa-bolt fa-fw"
-  }), _vm._v("Ideas")])], 1), _vm._v(" "), _c('li', [_c('router-link', {
+    staticClass: "fa fa-cubes fa-fw"
+  }), _vm._v("Collections")])], 1), _vm._v(" "), _c('li', [_c('router-link', {
     attrs: {
       "to": "/alerts"
     }

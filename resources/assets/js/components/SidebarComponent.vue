@@ -7,7 +7,7 @@
 		<ul>
 			<li><router-link to="/"><i class="fa fa-home fa-fw"></i>Dashboard</router-link></li>
 			<li><router-link to="/users"><i class="fa fa-users fa-fw"></i>Manager Users</router-link></li>
-			<li><router-link to="/ideas"><i class="fa fa-bolt fa-fw"></i>Ideas</router-link></li>
+			<li><router-link to="/collections"><i class="fa fa-cubes fa-fw"></i>Collections</router-link></li>
 			<li><router-link to="/alerts"><i class="fa fa-bell fa-fw"></i>Notification Center</router-link></li>
 			<li><router-link to="/messages"><i class="fa fa-envelope fa-fw"></i>Messages</router-link></li>
 			<li><router-link to="/plugins"><i class="fa fa-plug fa-fw"></i>Browse plugins</router-link></li>

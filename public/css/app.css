@@ -968,7 +968,7 @@
 }
 
 .blue {
-  background: blue;
+  background: #71a9f3;
 }
 
 a,
@@ -1167,13 +1167,18 @@ html,
   margin-bottom: 30px;
 }
 
-.typical-body .panel .field-type {
-  background: #d2a991;
-  color: white;
-  padding: 1px 3px;
+.typical-body .panel .badge {
+  background: #e2e2e2;
+  color: #adadad;
+  padding: 2px 5px;
   border-radius: 6px;
   font-size: 11px;
   text-transform: lowercase;
+}
+
+.typical-body .panel .badge.green {
+  background: #83ab83;
+  color: #fff;
 }
 
 .typical-body .panel .clickable {

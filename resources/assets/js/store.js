@@ -5,21 +5,29 @@ import Vuex from 'vuex'
 const store = new Vuex.Store({
 
 	state: {
-		ideas: []
+		collections: []
 	},
 	mutations: {
-		setIdeas(state, ideas){
-			state.ideas = ideas;
+		setCollections(state, collections){
+			state.collections = collections;
+		},
+		setField(state, field){
+			var collection = state.collections.find(c=>c.id.toLowerCase() == field.collection_id.toLowerCase());
+			let oldField = collection.fields.find(f=>f.id.toLowerCase() == field.id.toLowerCase());
+			collection.fields.splice(oldField, 1, field);
 		}
 	},
 	getters: {
-		getIdeas(state){
-			return state.ideas;
+		getCollections(state){
+			return state.collections;
 		}
 	},
 	actions: {
-		saveIdeas({commit}, ideas){
-			commit('setIdeas', ideas);
+		saveCollections({commit}, collections){
+			commit('setCollections', collections);
+		},
+		saveField({commit}, field){
+			commit('setField', field);
 		}
 	}
 

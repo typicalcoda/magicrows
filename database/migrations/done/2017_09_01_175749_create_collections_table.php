@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCategoriesTable extends Migration
+class CreateCollectionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,27 +13,18 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->string('id', 36);
+        Schema::create('collections', function (Blueprint $table) {
+            $table->string('id', 36)->primary();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('colour')->nullable();
-            $table->integer('sort_order')->nullable();
-
+            $table->integer('max_records')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('collections');
     }
 }
