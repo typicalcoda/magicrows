@@ -44,7 +44,17 @@ Route::group(['middleware' => 'auth'], function(){
 	});
 
 	// PUT 
+	Route::get('/api/test/field/', function(){
+		$field = new App\Field;
+		return $field->getTableColumns();
+
+	});
 	Route::put('/api/save/field/', function(){
+
+		// up date table first 
+		// check if the column actually exists
+
+
 		$data = request()->json()->all();
 		$field = App\Field::find($data['id']);
 		$field->name = $data['newValues']['name'];

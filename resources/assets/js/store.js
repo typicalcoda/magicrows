@@ -13,8 +13,8 @@ const store = new Vuex.Store({
 		},
 		setField(state, field){
 			var collection = state.collections.find(c=>c.id.toLowerCase() == field.collection_id.toLowerCase());
-			let oldField = collection.fields.find(f=>f.id.toLowerCase() == field.id.toLowerCase());
-			collection.fields.splice(oldField, 1, field);
+			let idx = collection.fields.map(f=>f.id.toLowerCase()).indexOf(field.id.toLowerCase());
+			collection.fields.splice(idx, 1, field);
 		}
 	},
 	getters: {

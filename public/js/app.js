@@ -39849,10 +39849,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			var collection = state.collections.find(function (c) {
 				return c.id.toLowerCase() == field.collection_id.toLowerCase();
 			});
-			var oldField = collection.fields.find(function (f) {
-				return f.id.toLowerCase() == field.id.toLowerCase();
-			});
-			collection.fields.splice(oldField, 1, field);
+			var idx = collection.fields.map(function (f) {
+				return f.id.toLowerCase();
+			}).indexOf(field.id.toLowerCase());
+			collection.fields.splice(idx, 1, field);
 		}
 	},
 	getters: {
@@ -43716,6 +43716,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -43764,8 +43772,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 							var theField = this.theCollection.fields.find(function (x) {
 								return x.name == _this.originalFieldName;
 							});
-
-							console.log("The field that will be updated: " + theField.name + ", id being " + theField.id);
 							axios.put('/api/save/field', { id: theField.id, newValues: this.field }).then(function (res) {
 								scope.$store.dispatch('saveField', res.data);
 							}).catch(function (err) {
@@ -43915,6 +43921,33 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "row"
   }, [_c('div', {
+    staticClass: "col-md-6"
+  }, [_c('div', {
+    staticClass: "input"
+  }, [_c('label', {
+    attrs: {
+      "for": ""
+    }
+  }, [_vm._v("Field name")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.field.name),
+      expression: "field.name"
+    }],
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.field.name)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.field.name = $event.target.value
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
     staticClass: "col-md-6"
   }, [_c('div', {
     staticClass: "input"
@@ -44230,7 +44263,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_vm._v(_vm._s(f.name))])]), _vm._v(" "), _c('td', [_c('span', {
       staticClass: "badge"
-    }, [_vm._v(_vm._s(f.type))])]), _vm._v(" "), _c('td', [_vm._v("--:--")]), _vm._v(" "), _c('td', [_vm._v("--:--")])]) : _vm._e()
+    }, [_vm._v(_vm._s(f.type))])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(f.created_at))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(f.updated_at))])]) : _vm._e()
   }))])])]), _vm._v(" "), _c('div', {
     staticClass: "row"
   }, [_c('div', {

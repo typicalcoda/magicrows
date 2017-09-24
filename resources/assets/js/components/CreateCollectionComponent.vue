@@ -51,6 +51,14 @@
 
 									<div class="col-md-6">
 										<div class="input">
+											<label for="">Field name</label>
+											<input type="text" v-model="field.name">
+										</div>
+									</div>
+
+
+									<div class="col-md-6">
+										<div class="input">
 											<label for="">Type</label>
 											<select name="" id="" v-model="field.type">
 												<option value="text">Text</option>
@@ -148,8 +156,8 @@
 							<tr v-if="theCollection" v-for="f in theCollection.fields">
 								<td><span class="clickable" @click="editField(f)">{{f.name}}</span></td>
 								<td><span class="badge">{{f.type}}</span></td>
-								<td>--:--</td>
-								<td>--:--</td>
+								<td>{{ f.created_at }}</td>
+								<td>{{ f.updated_at }}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -213,8 +221,6 @@
 								}
 							} else {
 								let theField = this.theCollection.fields.find(x=>x.name == this.originalFieldName);
-
-								console.log("The field that will be updated: " + theField.name + ", id being " + theField.id);
 								axios.put('/api/save/field', { id: theField.id, newValues: this.field })
 								.then( function(res){
 									scope.$store.dispatch('saveField', res.data)
